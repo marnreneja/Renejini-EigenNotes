@@ -17,6 +17,10 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- GoatCounter: brezplačno štetje obiskov. Zamenjaj MOJA-KODA s tvojo kodo iz goatcounter.com -->
+<script data-goatcounter="https://MOJA-KODA.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -153,13 +157,11 @@ header::before {
 /* podpis: lastna enačba, po kateri se stran imenuje.
    Živi v svoji celici mreže (2. vrstica, desni stolpec), zato je iskalnik nikoli ne prekrije. */
 .eq {
-    grid-column: 2;
-    grid-row: 2;
     justify-self: end;
     align-self: end;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(26px, 6.5vw, 104px);
+    font-size: clamp(22px, 4.5vw, 104px);
     letter-spacing: -0.04em;
     line-height: .8;
     color: var(--ink);
@@ -168,10 +170,16 @@ header::before {
     pointer-events: none;
     user-select: none;
     margin-bottom: -10px;
+    max-width: 100%;
+    overflow: hidden;
 }
-/* skrije se šele na pravem telefonu, ne že pri pol zaslona */
-@media (max-width: 560px) {
-    .eq { display: none; }
+/* ozek zaslon: enačba čez celo širino, poravnana levo */
+@media (max-width: 900px) {
+    .eq {
+        justify-self: start;
+        margin-top: 10px;
+        font-size: clamp(34px, 9vw, 64px);
+    }
 }
 
 .head-inner {
@@ -181,8 +189,25 @@ header::before {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "brand lamp"
+        "search eq";
     gap: 26px 24px;
     align-items: start;
+}
+.head-inner > div:first-child { grid-area: brand; }
+.controls { grid-area: lamp; }
+.searchbox { grid-area: search; }
+.eq { grid-area: eq; }
+
+@media (max-width: 900px) {
+    .head-inner {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "brand lamp"
+            "search search"
+            "eq eq";
+    }
 }
 
 .wordmark {
@@ -231,12 +256,11 @@ header::before {
 }
 
 .searchbox {
-    grid-column: 1;
-    grid-row: 2;
     align-self: end;
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
     background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: var(--r);
@@ -251,6 +275,7 @@ header::before {
 
 #search {
     flex: 1;
+    min-width: 0;
     border: 0;
     background: none;
     color: var(--ink);
@@ -280,6 +305,7 @@ header::before {
     cursor: pointer;
     display: grid;
     justify-items: center;
+    justify-content: center;
     width: 60px;
 }
 
@@ -310,11 +336,11 @@ header::before {
 /* svetlobni stožec — vrh se dotika žarnice, vrvica teče skozenj */
 .lamp .cone {
     position: absolute;
-    top: 76px;                   /* žica 46px + žarnica 34px */
+    top: 84px;                   /* žica 46px + večja žarnica */
     left: 50%;
     transform: translateX(-50%);
-    width: 132px;
-    height: 108px;
+    width: 165px;
+    height: 135px;
     clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
     background: linear-gradient(180deg, color-mix(in srgb, var(--glow) 48%, transparent), transparent 82%);
     opacity: 0;
@@ -373,6 +399,11 @@ header::before {
     text-shadow: 0 0 9px color-mix(in srgb, var(--glow) 45%, transparent);
     opacity: 1;
 }
+
+/* svetilka in napis 25% večja (oba načina) */
+.lamp .bulb { width: 42px; height: 42px; }
+.lamp .pull-bead { width: 17px; height: 17px; }
+.lamp-label { font-size: 25px; }
 
 
 
@@ -636,7 +667,8 @@ main {
 
 .card.wide .file-list { columns: 2; column-gap: 28px; padding: 10px 0 14px; }
 .card.wide .file-list li { break-inside: avoid; border-top: 1px solid var(--rule); }
-@media (max-width: 700px) {
+/* pri zoomu je 2 stolpca pretesna za gumbe → 1 stolpec prej */
+@media (max-width: 1000px) {
     .card.wide .file-list { columns: 1; }
 }
 
@@ -790,7 +822,7 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
     margin: 0 auto;
     padding: 44px 20px 32px;
     display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 36px;
     align-items: start;
 }
@@ -867,14 +899,11 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
 .foot-base {
     border-top: 1px solid var(--rule);
     padding: 16px 20px 22px;
-}
-.foot-base > * {
-    max-width: 1180px;
-}
-.foot-base {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    gap: 14px;
+    align-items: center;
+    gap: 10px 14px;
     max-width: 1180px;
     margin: 0 auto;
     font-family: var(--font-mono);
@@ -884,16 +913,16 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
 }
 .foot-eq { color: var(--accent-3); opacity: .8; }
 
-@media (max-width: 860px) {
-    .foot-inner { grid-template-columns: 1fr; gap: 28px; }
-}
 
-/* ─── mobile ───────────────────────────────────────────────── */
-@media (max-width: 700px) {
-    header { padding: 28px 18px 22px; }
+
+/* ─── ozko / zoom ──────────────────────────────────────────── */
+@media (max-width: 1000px) {
     .file-list li { flex-wrap: wrap; }
     .acts { width: 100%; }
     .act { flex: 1; justify-content: center; }
+}
+@media (max-width: 700px) {
+    header { padding: 28px 18px 22px; }
     .card.wide { margin-bottom: 26px; }
 }
 </style>
@@ -976,14 +1005,15 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
         <dl class="foot-stats">
             <div><dt>Predmetov</dt><dd id="stat-subjects">—</dd></div>
             <div><dt>Datotek</dt><dd id="stat-files">—</dd></div>
+            <div><dt>Ogledov</dt><dd id="stat-views">—</dd></div>
             <div><dt>Posodobljeno</dt><dd>feb 2026</dd></div>
         </dl>
 
         <div class="foot-contact">
             <p class="foot-cta">Manjka kakšen predmet ali si našel napako? Piši mi.</p>
             <div class="foot-links">
-                <a class="flink mail" href="https://mail.google.com/mail/?view=cm&amp;to=rm80175@student.uni-lj.si" target="_blank" rel="noopener">✉ E-pošta</a>
-                <a class="flink dc" href="https://discord.com/users/renejamarn" target="_blank" rel="noopener">◈ Discord</a>
+                <a class="flink mail" href="mailto:rm80175@student.uni-lj.si?subject=EigenNotes">✉ E-pošta</a>
+                <a class="flink dc" href="https://discordapp.com/users/renejamarn" target="_blank" rel="noopener">◈ Discord</a>
             </div>
         </div>
     </div>
@@ -1422,6 +1452,33 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e =
     document.getElementById("stat-subjects").textContent = subjects;
     document.getElementById("stat-files").textContent = files;
 })();
+
+/* ─── ogledi strani (GoatCounter) ──────────────────────────── */
+/* GoatCounter ponuja javni števec kot JSON. Zamenjaj MOJA-KODA. */
+(function views() {
+    const el = document.getElementById("stat-views");
+    fetch("https://MOJA-KODA.goatcounter.com/counter/" +
+          encodeURIComponent(location.pathname) + ".json")
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(d => { el.textContent = d.count_unique || d.count || "—"; })
+        .catch(() => { el.textContent = "—"; });   /* pred registracijo ostane črtica */
+})();
+
+/* ─── štetje prenosov (GoatCounter event) ──────────────────── */
+/* Vsak klik na "prenesi" pošlje dogodek; vidiš ga v GoatCounter nadzorni plošči. */
+document.addEventListener("click", e => {
+    const dl = e.target.closest("a.act.dl");
+    if (dl && window.goatcounter && window.goatcounter.count) {
+        const card = dl.closest(".card");
+        const subj = card ? card.querySelector("h3").textContent.trim() : "?";
+        const file = dl.closest("li").querySelector(".fname").textContent.trim();
+        window.goatcounter.count({
+            path:  "download/" + subj + "/" + file,
+            title: "Prenos: " + subj + " – " + file,
+            event: true
+        });
+    }
+});
 
 /* ─── zagon ────────────────────────────────────────────────── */
 render();
