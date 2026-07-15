@@ -21,7 +21,7 @@
 <script data-goatcounter="https://renejini-eigennotes.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gochi+Hand&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 /* ─── tokens ───────────────────────────────────────────────── */
@@ -158,26 +158,30 @@ header::before {
 .eq {
     justify-self: end;
     align-self: end;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(22px, 4.5vw, 104px);
-    letter-spacing: -0.04em;
-    line-height: .8;
-    color: var(--ink);
-    opacity: .07;
+    font-family: "Gochi Hand", cursive;    /* kredna pisava, kot pri stikalu */
+    font-weight: 400;
+    font-size: clamp(30px, 6.4vw, 72px);   /* enako kot EigenNotes */
+    letter-spacing: .01em;
+    line-height: 1.1;                      /* dovolj prostora za rep ψ */
+    letter-spacing: .04em;
+    transform: rotate(-4deg);              /* enak nagib kot napis */
+    /* enak slog kot prižgan napis "svetlo" pod svetilko */
+    color: color-mix(in srgb, var(--glow) 78%, var(--ink));
+    opacity: 1;
+    text-shadow: 0 0 9px color-mix(in srgb, var(--glow) 45%, transparent);
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
-    margin-bottom: -10px;
+    padding-bottom: 6px;                   /* rep ψ ni odrezan */
+    margin-bottom: -6px;
     max-width: 100%;
-    overflow: hidden;
 }
 /* ozek zaslon: enačba čez celo širino, poravnana levo */
 @media (max-width: 900px) {
     .eq {
         justify-self: start;
         margin-top: 10px;
-        font-size: clamp(34px, 9vw, 64px);
+        font-size: clamp(34px, 9vw, 60px);
     }
 }
 
@@ -198,6 +202,16 @@ header::before {
 .controls { grid-area: lamp; }
 .searchbox { grid-area: search; }
 .eq { grid-area: eq; }
+body.dark .eq {
+    color: var(--ink-soft);
+    opacity: .85;
+    text-shadow:
+        .5px .4px 0 color-mix(in srgb, var(--ink-soft) 30%, transparent),
+        -.3px -.2px .6px color-mix(in srgb, var(--ink-soft) 20%, transparent);
+}
+/* samo E iz Caveat (Gochi ima čuden E); prilagojena velikost za enako višino */
+.eq .cap-e { font-family: "Caveat", cursive; font-weight: 700; font-size: 1.15em; }
+
 
 @media (max-width: 900px) {
     .head-inner {
@@ -976,7 +990,7 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
             </button>
         </div>
 
-        <span class="eq" aria-hidden="true">Ĥψ = Eψ</span>
+        <span class="eq" aria-hidden="true">Ĥψ = <span class="cap-e">E</span>ψ</span>
 
         <div class="searchbox">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -1024,11 +1038,11 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
             <div><dt>Predmetov</dt><dd id="stat-subjects">—</dd></div>
             <div><dt>Datotek</dt><dd id="stat-files">—</dd></div>
             <div><dt>Obiskov</dt><dd id="stat-views">—</dd></div>
-            <div><dt>Posodobljeno</dt><dd>jul 2026</dd></div>
+            <div><dt>Posodobljeno</dt><dd>feb 2026</dd></div>
         </dl>
 
         <div class="foot-contact">
-            <p class="foot-cta">Manjka kakšen predmet ali si našel napako? Sporoči mi.</p>
+            <p class="foot-cta">Manjka kakšen predmet ali si našel napako? Piši mi.</p>
             <div class="foot-links">
                 <a class="flink mail" href="mailto:rm80175@student.uni-lj.si?subject=EigenNotes%20%E2%80%93%20zapiski">✉ E-pošta</a>
                 <a class="flink dc" href="https://discord.com/users/769605757033119754" target="_blank" rel="noopener">◈ Discord</a>
