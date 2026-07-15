@@ -1005,15 +1005,15 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
         <dl class="foot-stats">
             <div><dt>Predmetov</dt><dd id="stat-subjects">—</dd></div>
             <div><dt>Datotek</dt><dd id="stat-files">—</dd></div>
-            <div><dt>Ogledov</dt><dd id="stat-views">—</dd></div>
+            <div><dt>Obiskov</dt><dd id="stat-views">—</dd></div>
             <div><dt>Posodobljeno</dt><dd>feb 2026</dd></div>
         </dl>
 
         <div class="foot-contact">
             <p class="foot-cta">Manjka kakšen predmet ali si našel napako? Piši mi.</p>
             <div class="foot-links">
-                <a class="flink mail" href="mailto:rm80175@student.uni-lj.si?subject=EigenNotes">✉ E-pošta</a>
-                <a class="flink dc" href="https://discordapp.com/users/renejamarn" target="_blank" rel="noopener">◈ Discord</a>
+                <a class="flink mail" href="mailto:rm80175@student.uni-lj.si?subject=EigenNotes%20%E2%80%93%20zapiski">✉ E-pošta</a>
+                <a class="flink dc" href="https://discord.com/users/769605757033119754" target="_blank" rel="noopener">◈ Discord</a>
             </div>
         </div>
     </div>
@@ -1457,11 +1457,12 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e =
 /* GoatCounter ponuja javni števec kot JSON. Zamenjaj renejini-eigennotes. */
 (function views() {
     const el = document.getElementById("stat-views");
-    fetch("https://renejini-eigennotes.goatcounter.com/counter/" +
-          encodeURIComponent(location.pathname) + ".json")
+    /* /counter/TOTAL.json => skupno število obiskov celotne strani.
+       GoatCounter vrne polje "count" (že formatirano, npr. "1.2k"). */
+    fetch("https://renejini-eigennotes.goatcounter.com/counter/TOTAL.json")
         .then(r => r.ok ? r.json() : Promise.reject())
-        .then(d => { el.textContent = d.count_unique || d.count || "—"; })
-        .catch(() => { el.textContent = "—"; });   /* pred registracijo ostane črtica */
+        .then(d => { el.textContent = d.count ?? "—"; })
+        .catch(() => { el.textContent = "—"; });   /* če javni števec ni vklopljen */
 })();
 
 /* ─── štetje prenosov (GoatCounter event) ──────────────────── */
