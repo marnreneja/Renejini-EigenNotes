@@ -69,16 +69,14 @@ body.dark {
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
-/* celotna stran 2× — kot zoom v brskalniku */
+
+/* Povečava celotne strani, kot zoom v brskalniku.
+   Na ožjih zaslonih zoom PADA, na telefonu ga sploh ni — sicer stran štrli čez rob. */
 body { zoom: 2; }
-/* Firefox nima zoom -> nadomestek */
-@supports not (zoom: 2) {
-    body {
-        transform: scale(2);
-        transform-origin: top left;
-        width: 50%;
-    }
-}
+@media (max-width: 1400px) { body { zoom: 1.7; } }
+@media (max-width: 1100px) { body { zoom: 1.4; } }
+@media (max-width: 820px)  { body { zoom: 1.15; } }
+@media (max-width: 640px)  { body { zoom: 1; } }
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     * { transition: none !important; animation: none !important; }
@@ -87,6 +85,7 @@ body { zoom: 2; }
 body {
     margin: 0;
     min-height: 100vh;
+    overflow-x: hidden;          /* nič vodoravnega štrlenja */
     display: flex;
     flex-direction: column;
     background:
@@ -914,6 +913,25 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
 .foot-eq { color: var(--accent-3); opacity: .8; }
 
 
+
+/* telefon: glava v en stolpec, brez štrlenja */
+@media (max-width: 640px) {
+    .head-inner {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "brand"
+            "lamp"
+            "search"
+            "eq";
+        gap: 18px;
+    }
+    .controls { justify-self: start; }
+    .lamp { margin-top: 0; }              /* žica ne visi z roba glave na telefonu */
+    .wordmark { font-size: clamp(34px, 13vw, 54px); }
+    .wordmark .eigen::after { bottom: -5px; height: 3px; }
+    .eq { font-size: clamp(30px, 12vw, 52px); }
+    .searchbox { max-width: 100%; }
+}
 
 /* ─── ozko / zoom ──────────────────────────────────────────── */
 @media (max-width: 1000px) {
