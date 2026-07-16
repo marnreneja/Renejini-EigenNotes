@@ -1038,6 +1038,7 @@ footer .spectrum { position: absolute; top: 0; left: 0; }
             <div><dt>Predmetov</dt><dd id="stat-subjects">—</dd></div>
             <div><dt>Datotek</dt><dd id="stat-files">—</dd></div>
             <div><dt>Obiskov</dt><dd id="stat-views">—</dd></div>
+            <div><dt>Prenosov</dt><dd id="stat-downloads">—</dd></div>
             <div><dt>Posodobljeno</dt><dd>feb 2026</dd></div>
         </dl>
 
@@ -1495,6 +1496,14 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e =
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(d => { el.textContent = d.count ?? "—"; })
         .catch(() => { el.textContent = "—"; });   /* če javni števec ni vklopljen */
+
+    /* skupno število prenosov: dogodek "download" */
+    const dlEl = document.getElementById("stat-downloads");
+    fetch("https://renejini-eigennotes.goatcounter.com/counter/" +
+          encodeURIComponent("download") + ".json")
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(d => { dlEl.textContent = d.count ?? "0"; })
+        .catch(() => { dlEl.textContent = "—"; });
 })();
 
 /* ─── štetje prenosov (GoatCounter event) ──────────────────── */
@@ -1505,6 +1514,9 @@ document.addEventListener("click", e => {
         const card = dl.closest(".card");
         const subj = card ? card.querySelector("h3").textContent.trim() : "?";
         const file = dl.closest("li").querySelector(".fname").textContent.trim();
+        /* 1) skupni števec za nogo */
+        window.goatcounter.count({ path: "download", title: "Prenos", event: true });
+        /* 2) podroben zapis za nadzorno ploščo */
         window.goatcounter.count({
             path:  "download/" + subj + "/" + file,
             title: "Prenos: " + subj + " – " + file,
